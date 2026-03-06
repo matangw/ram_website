@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+/// A premium full-width section displaying rotating friend quotes.
+///
+/// Features:
+/// - Centered quote with author below
+/// - AnimatedSwitcher for smooth transition when quote changes
+/// - Dark theme (#0D0D0D)
+/// - Serif for quote, sans for author
+/// - Entrance animation via flutter_animate
+class FriendsQuotesSection extends StatelessWidget {
+  const FriendsQuotesSection({
+    super.key,
+    required this.quote,
+    required this.author,
+  });
+
+  final String quote;
+  final String author;
+
+  static const double _mobileBreakpoint = 600;
+  static const Color _bgColor = Color(0xFF0D0D0D);
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < _mobileBreakpoint;
+    final horizontalPadding = isMobile ? 24.0 : 48.0;
+    final verticalPadding = isMobile ? 48.0 : 72.0;
+    final quoteFontSize = isMobile ? 22.0 : 30.0;
+    final authorFontSize = isMobile ? 14.0 : 16.0;
+
+    return Container(
+          width: double.infinity,
+          color: _bgColor,
+          padding: EdgeInsetsDirectional.only(
+            start: horizontalPadding,
+            end: horizontalPadding,
+            top: verticalPadding,
+            bottom: verticalPadding,
+          ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
+                child: Column(
+                  key: ValueKey<String>('$quote-$author'),
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '״',
+                      style: GoogleFonts.heebo(
+                        fontSize: 64,
+                        height: 0.8,
+                        color: Colors.white.withOpacity(0.25),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    Text(
+                      quote,
+                      textAlign: TextAlign.start,
+                      style: GoogleFonts.heebo(
+                        fontSize: quoteFontSize,
+                        height: 1.65,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.white.withOpacity(0.95),
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      author.isEmpty ? '' : '— $author',
+                      textAlign: TextAlign.start,
+                      style: GoogleFonts.heebo(
+                        fontSize: authorFontSize,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white.withOpacity(0.6),
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+    );
+  }
+}
