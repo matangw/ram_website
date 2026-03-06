@@ -22,10 +22,12 @@ class MemorialApp extends StatelessWidget {
       fallbackLocale: const Locale('he', 'IL'),
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.dark(
-          primary: const Color(0xFFC9A227),
-          surface: const Color(0xFF0D0D0D),
-          onSurface: Colors.white,
+        colorScheme: ColorScheme.light(
+          primary: const Color(0xFFB8860B),
+          surface: const Color(0xFFFAF7F2),
+          onSurface: const Color(0xFF2D2D2D),
+          onSurfaceVariant: const Color(0xFF6B6B6B),
+          tertiary: const Color(0xFF7A9B76),
         ),
       ),
       builder: (context, child) {

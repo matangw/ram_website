@@ -114,7 +114,7 @@ class _BackgroundImageStack extends StatelessWidget {
   Widget build(BuildContext context) {
     if (imagePaths.isEmpty) {
       return Container(
-        color: const Color(0xFF0D0D0D),
+        color: const Color(0xFFFAF7F2),
       );
     }
 
@@ -149,12 +149,12 @@ class _BackgroundImage extends StatelessWidget {
           developer.log('IMAGE LOAD ERROR: $error', name: 'FadingHeader');
           developer.log('stackTrace: $stackTrace', name: 'FadingHeader');
           return Container(
-            color: const Color(0xFF0D0D0D),
+            color: const Color(0xFFFAF7F2),
             child: Center(
               child: Text(
                 'הוסף תמונות ל-assets/header/',
                 style: GoogleFonts.heebo(
-                  color: Colors.white54,
+                  color: const Color(0xFF6B6B6B),
                   fontSize: 14,
                 ),
               ),
@@ -178,9 +178,9 @@ class _DarkGradientOverlay extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
+              Colors.black.withOpacity(0.15),
               Colors.black.withOpacity(0.3),
               Colors.black.withOpacity(0.5),
-              Colors.black.withOpacity(0.7),
             ],
             stops: const [0.0, 0.5, 1.0],
           ),
@@ -216,13 +216,13 @@ class _GlassmorphismNavBar extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  const Color(0xFF1A1A1A).withOpacity(0.85),
-                  const Color(0xFF0D0D0D).withOpacity(0.6),
+                  const Color(0xFFFAF7F2).withOpacity(0.85),
+                  const Color(0xFFF5F0E8).withOpacity(0.6),
                 ],
               ),
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.white.withOpacity(0.08),
+                  color: Colors.black.withOpacity(0.06),
                   width: 1,
                 ),
               ),

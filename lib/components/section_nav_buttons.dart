@@ -77,8 +77,8 @@ class _NavButtonState extends State<_NavButton> {
         onHover: (hovered) => setState(() => _isHovered = hovered),
         onHighlightChanged: (pressed) => setState(() => _isPressed = pressed),
         borderRadius: BorderRadius.circular(8),
-        splashColor: Colors.white.withOpacity(0.08),
-        highlightColor: Colors.white.withOpacity(0.04),
+        splashColor: Colors.black.withOpacity(0.08),
+        highlightColor: Colors.black.withOpacity(0.04),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
@@ -89,12 +89,12 @@ class _NavButtonState extends State<_NavButton> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: widget.isActive
-                ? Colors.white.withOpacity(0.12)
-                : (isInteractive ? Colors.white.withOpacity(0.06) : null),
+                ? Colors.black.withOpacity(0.08)
+                : (isInteractive ? Colors.black.withOpacity(0.04) : null),
             border: Border.all(
               color: widget.isActive
-                  ? Colors.white.withOpacity(0.25)
-                  : (isInteractive ? Colors.white.withOpacity(0.12) : Colors.transparent),
+                  ? Colors.black.withOpacity(0.2)
+                  : (isInteractive ? Colors.black.withOpacity(0.1) : Colors.transparent),
               width: 1,
             ),
           ),
@@ -106,8 +106,8 @@ class _NavButtonState extends State<_NavButton> {
               fontWeight: widget.isActive ? FontWeight.w600 : FontWeight.w500,
               letterSpacing: 0.2,
               color: widget.isActive
-                  ? Colors.white
-                  : Colors.white.withOpacity(isInteractive ? 0.9 : 0.7),
+                  ? const Color(0xFF2D2D2D)
+                  : const Color(0xFF2D2D2D).withOpacity(isInteractive ? 0.9 : 0.7),
             ),
             child: Text(widget.label),
           ),

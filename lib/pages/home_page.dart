@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
     _scrollCtrl.viewportHeight = viewportHeight;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: const Color(0xFFFAF7F2),
       body: Stack(
         children: [
           // Scrollable body - drawn first (bottom layer)

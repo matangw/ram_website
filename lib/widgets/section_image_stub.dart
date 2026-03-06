@@ -22,7 +22,7 @@ Widget buildSectionImage({
       height: height,
       enableHoverIcons: false,
       customLoadingBuilder: (context, child, progress) => Container(
-        color: const Color(0xFF1A1A1A),
+        color: const Color(0xFFF5F0E8),
         child: const Center(
           child: SizedBox(
             width: 24,
@@ -36,9 +36,9 @@ Widget buildSectionImage({
             developer.log('CustomNetworkImage LOAD ERROR: $error', name: 'SectionImage');
             developer.log('URL was: ${imagePath.substring(0, imagePath.length.clamp(0, 80))}...', name: 'SectionImage');
             return Container(
-              color: const Color(0xFF1A1A1A),
+              color: const Color(0xFFF5F0E8),
               child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: Colors.white38),
+                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
               ),
             );
           },
@@ -52,9 +52,9 @@ Widget buildSectionImage({
     height: height,
     errorBuilder: errorBuilder ??
         (context, error, stackTrace) => Container(
-              color: const Color(0xFF1A1A1A),
+              color: const Color(0xFFF5F0E8),
               child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: Colors.white38),
+                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
               ),
             ),
   );

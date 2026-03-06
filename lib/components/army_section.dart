@@ -12,7 +12,7 @@ import 'package:ram_website/widgets/section_image.dart';
 /// - Right: Image (parent passes currentImagePath for rotation control)
 /// - LayoutBuilder: Desktop = side-by-side; Mobile = stacked (summary top, image below)
 /// - Dark theme with tasteful military-inspired accents (muted green/gold)
-/// - Rounded image with subtle shadow
+/// - Flat image with accent border
 /// - Entrance animation via flutter_animate
 class ArmySection extends StatelessWidget {
   const ArmySection({
@@ -31,13 +31,14 @@ class ArmySection extends StatelessWidget {
   /// Minimum height of the section in logical pixels.
   final double minHeight;
 
-  // Memorial-appropriate military accents (muted, tasteful)
-  static const Color _accentGreen = Color(0xFF4A5D4A);
-  static const Color _accentGold = Color(0xFF8B7B5A);
-  static const Color _bgDark = Color(0xFF0D0D0D);
-  static const Color _cardBg = Color(0xFF141414);
-  static const Color _textPrimary = Color(0xFFE8E8E8);
-  static const Color _textSecondary = Color(0xFFB0B0B0);
+  // Optimistic memorial accents (sage, warm bronze)
+  static const Color _accentGreen = Color(0xFF7A9B76);
+  static const Color _accentGreenDark = Color(0xFF5A7856); // darker variant for borders
+  static const Color _accentGold = Color(0xFF8B7355);
+  static const Color _bgDark = Color(0xFFFAF7F2);
+  static const Color _cardBg = Color(0xFFF5F0E8);
+  static const Color _textPrimary = Color(0xFF2D2D2D);
+  static const Color _textSecondary = Color(0xFF6B6B6B);
 
   @override
   Widget build(BuildContext context) {
@@ -60,37 +61,46 @@ class ArmySection extends StatelessWidget {
               top: isMobile ? 32 : 48,
               bottom: isMobile ? 32 : 48,
             ),
-            child: isMobile ? _buildMobileLayout() : _buildDesktopLayout(),
+            child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
           ),
         );
   }
 
-  Widget _buildDesktopLayout() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      textDirection: TextDirection.rtl,
+  Widget _buildDesktopLayout(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          flex: 1,
-          child: _buildSummaryContent(),
-        ),
-        const SizedBox(width: 48),
-        Expanded(
-          flex: 1,
-          child: _buildImageContent(),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            textDirection: TextDirection.rtl,
+            children: [
+              Expanded(
+                flex: 1,
+                child: _buildSummaryContent(),
+              ),
+              const SizedBox(width: 48),
+              Expanded(
+                flex: 2,
+                child: _buildImageContent(context),
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildMobileLayout() {
+  Widget _buildMobileLayout(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildSummaryContent(),
         const SizedBox(height: 32),
-        _buildImageContent(),
+        _buildImageContent(context),
       ],
     );
   }
@@ -140,18 +150,26 @@ class ArmySection extends StatelessWidget {
     );
   }
 
-  Widget _buildImageContent() {
+  Widget _buildImageContent(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+    // Use 4/3 (landscape) on desktop so image fills width like bio section
+    final aspectRatio = 4 / 3;
+    final maxHeight = isMobile ? 260.0 : 340.0;
+
     if (imagePath.isEmpty) {
       developer.log('imagePath is EMPTY', name: 'ArmySection');
       return _AnimatedContent(
         child: Container(
-          constraints: const BoxConstraints(minHeight: 280),
+          constraints: BoxConstraints(
+            maxHeight: maxHeight,
+            minHeight: 160,
+          ),
           decoration: BoxDecoration(
             color: _cardBg,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: _accentGreen.withOpacity(0.25),
-              width: 1,
+              color: _accentGreenDark,
+              width: 6,
             ),
           ),
           child: Center(
@@ -179,71 +197,49 @@ class ArmySection extends StatelessWidget {
     );
 
     return _AnimatedContent(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 280),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.4),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-                spreadRadius: -4,
-              ),
-              BoxShadow(
-                color: _accentGreen.withOpacity(0.08),
-                blurRadius: 24,
-                offset: const Offset(0, 4),
-                spreadRadius: -2,
-              ),
-            ],
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: maxHeight,
+          minHeight: 160,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: _accentGreenDark,
+            width: 6,
           ),
-          child: Stack(
-            children: [
-              // Non-positioned child sizes the Stack (required for scroll/layout)
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 800),
-                switchInCurve: Curves.easeIn,
-                switchOutCurve: Curves.easeOut,
-                child: KeyedSubtree(
-                  key: ValueKey<String>(imagePath),
-                  child: buildSectionImage(
-                    imagePath,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                    errorBuilder: (_, error, st) {
-                      developer.log('IMAGE LOAD ERROR: $error', name: 'ArmySection');
-                      developer.log('stackTrace: $st', name: 'ArmySection');
-                      return errorPlaceholder;
-                    },
-                  ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: AspectRatio(
+            aspectRatio: aspectRatio,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 800),
+              switchInCurve: Curves.easeIn,
+              switchOutCurve: Curves.easeOut,
+              child: KeyedSubtree(
+                key: ValueKey<String>(imagePath),
+                child: buildSectionImage(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  errorBuilder: (_, error, st) {
+                    developer.log('IMAGE LOAD ERROR: $error', name: 'ArmySection');
+                    developer.log('stackTrace: $st', name: 'ArmySection');
+                    return errorPlaceholder;
+                  },
                 ),
               ),
-              // Subtle gradient overlay for depth
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: _accentGold.withOpacity(0.15),
-                      width: 1,
-                    ),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.15),
-                      ],
-                      stops: const [0.6, 1.0],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

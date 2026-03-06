@@ -30,7 +30,7 @@ Widget buildSectionImage({
       height: height,
       enableHoverIcons: false,
       customLoadingBuilder: (context, child, progress) => Container(
-        color: const Color(0xFF1A1A1A),
+        color: const Color(0xFFF5F0E8),
         child: const Center(
           child: SizedBox(
             width: 24,
@@ -46,9 +46,9 @@ Widget buildSectionImage({
               name: 'SectionImage',
             );
             return Container(
-              color: const Color(0xFF1A1A1A),
+              color: const Color(0xFFF5F0E8),
               child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: Colors.white38),
+                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
               ),
             );
           },
@@ -62,7 +62,7 @@ Widget buildSectionImage({
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return Container(
-          color: const Color(0xFF1A1A1A),
+          color: const Color(0xFFF5F0E8),
           child: const Center(
             child: SizedBox(
               width: 24,
@@ -76,31 +76,51 @@ Widget buildSectionImage({
         developer.log('Asset load failed: ${snapshot.error}', name: 'SectionImage');
         return errorBuilder?.call(context, snapshot.error ?? Object(), StackTrace.current) ??
             Container(
-              color: const Color(0xFF1A1A1A),
+              color: const Color(0xFFF5F0E8),
               child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: Colors.white38),
+                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
               ),
             );
       }
       return LayoutBuilder(
         builder: (context, constraints) {
           // Image needs bounded constraints; parent may give unbounded height
+          final hasBounded = constraints.maxWidth.isFinite && constraints.maxHeight.isFinite;
+          if (hasBounded) {
+            return SizedBox.expand(
+              child: Image.memory(
+                snapshot.data!,
+                fit: BoxFit.cover,
+                errorBuilder: errorBuilder ??
+                    (context, error, stackTrace) => Container(
+                          color: const Color(0xFFF5F0E8),
+                          child: const Center(
+                            child: Icon(Icons.broken_image_outlined, color: Color(0xFF6B6B6B)),
+                          ),
+                        ),
+              ),
+            );
+          }
           final w = width ?? constraints.maxWidth;
           final h = height ?? constraints.maxHeight;
           final boundedH = (h.isFinite ? h : (w.isFinite ? w * 0.75 : 400.0)).toDouble();
           final boundedW = (w.isFinite ? w : (boundedH * 4 / 3)).toDouble();
-          return Image.memory(
-            snapshot.data!,
-            fit: fit,
+          return SizedBox(
             width: boundedW,
             height: boundedH,
-            errorBuilder: errorBuilder ??
-                (context, error, stackTrace) => Container(
-                      color: const Color(0xFF1A1A1A),
-                      child: const Center(
-                        child: Icon(Icons.broken_image_outlined, color: Colors.white38),
+            child: Image.memory(
+              snapshot.data!,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              errorBuilder: errorBuilder ??
+                  (context, error, stackTrace) => Container(
+                        color: const Color(0xFFF5F0E8),
+                        child: const Center(
+                          child: Icon(Icons.broken_image_outlined, color: Color(0xFF6B6B6B)),
+                        ),
                       ),
-                    ),
+            ),
           );
         },
       );

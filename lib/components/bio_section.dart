@@ -31,7 +31,7 @@ class BioSection extends StatelessWidget {
   static const double _mobileBreakpoint = 600;
   static const double _tabletBreakpoint = 900;
   static const double _minHeight = 400;
-  static const Color _bgColor = Color(0xFF0D0D0D);
+  static const Color _bgColor = Color(0xFFFAF7F2);
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +127,7 @@ class _BioContent extends StatelessWidget {
               fontSize: isMobile ? 18 : 22,
               height: 1.7,
               fontWeight: FontWeight.w400,
-              color: Colors.white.withOpacity(0.92),
+              color: const Color(0xFF2D2D2D),
               letterSpacing: 0.3,
             ),
           ),
@@ -141,6 +141,9 @@ class _ProfileImage extends StatelessWidget {
   const _ProfileImage({required this.imagePath});
 
   final String imagePath;
+
+  static const Color _accentSage = Color(0xFF7A9B76);
+  static const Color _accentSageDark = Color(0xFF5A7856); // darker variant for borders
 
   @override
   Widget build(BuildContext context) {
@@ -165,30 +168,31 @@ class _ProfileImage extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: _accentSageDark,
+          width: 6,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 24,
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 20,
             offset: const Offset(0, 8),
-            spreadRadius: -4,
-          ),
-          BoxShadow(
-            color: Colors.white.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
           ),
         ],
       ),
       clipBehavior: Clip.antiAlias,
-      child: AspectRatio(
-        aspectRatio: aspectRatio,
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 800),
-          switchInCurve: Curves.easeIn,
-          switchOutCurve: Curves.easeOut,
-          child: KeyedSubtree(
-            key: ValueKey<String>(imagePath),
-            child: _buildImage(imagePath, aspectRatio, maxHeight, isMobile),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: AspectRatio(
+          aspectRatio: aspectRatio,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 800),
+            switchInCurve: Curves.easeIn,
+            switchOutCurve: Curves.easeOut,
+            child: KeyedSubtree(
+              key: ValueKey<String>(imagePath),
+              child: _buildImage(imagePath, aspectRatio, maxHeight, isMobile),
+            ),
           ),
         ),
       ),
@@ -204,6 +208,8 @@ class _ProfileImage extends StatelessWidget {
     return buildSectionImage(
       path,
       fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
       errorBuilder: (_, error, st) {
         developer.log('IMAGE LOAD ERROR: $error', name: 'BioSection');
         developer.log('stackTrace: $st', name: 'BioSection');
@@ -232,12 +238,19 @@ class _PlaceholderImage extends StatelessWidget {
         minHeight: isMobile ? 200 : 280,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: const Color(0xFFF5F0E8),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.08),
-          width: 1,
+          color: const Color(0xFF5A7856),
+          width: 6,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: AspectRatio(
         aspectRatio: aspectRatio,
@@ -245,7 +258,7 @@ class _PlaceholderImage extends StatelessWidget {
           child: Icon(
             Icons.person_outline_rounded,
             size: 40,
-            color: Colors.white.withOpacity(0.2),
+            color: const Color(0xFF6B6B6B).withOpacity(0.6),
           ),
         ),
       ),

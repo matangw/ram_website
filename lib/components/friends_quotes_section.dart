@@ -20,7 +20,7 @@ class FriendsQuotesSection extends StatelessWidget {
   final String author;
 
   static const double _mobileBreakpoint = 600;
-  static const Color _bgColor = Color(0xFF0D0D0D);
+  static const Color _bgColor = Color(0xFFFAF7F2);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class FriendsQuotesSection extends StatelessWidget {
                       style: GoogleFonts.heebo(
                         fontSize: 64,
                         height: 0.8,
-                        color: Colors.white.withOpacity(0.25),
+                        color: Colors.black.withOpacity(0.15),
                         fontWeight: FontWeight.w300,
                       ),
                     ),
@@ -68,7 +68,7 @@ class FriendsQuotesSection extends StatelessWidget {
                         height: 1.65,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.italic,
-                        color: Colors.white.withOpacity(0.95),
+                        color: const Color(0xFF2D2D2D),
                         letterSpacing: 0.2,
                       ),
                     ),
@@ -79,7 +79,7 @@ class FriendsQuotesSection extends StatelessWidget {
                       style: GoogleFonts.heebo(
                         fontSize: authorFontSize,
                         fontWeight: FontWeight.w400,
-                        color: Colors.white.withOpacity(0.6),
+                        color: const Color(0xFF6B6B6B),
                         letterSpacing: 0.5,
                       ),
                     ),
