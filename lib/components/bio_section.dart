@@ -182,7 +182,15 @@ class _ProfileImage extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: AspectRatio(
         aspectRatio: aspectRatio,
-        child: _buildImage(imagePath, aspectRatio, maxHeight, isMobile),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 800),
+          switchInCurve: Curves.easeIn,
+          switchOutCurve: Curves.easeOut,
+          child: KeyedSubtree(
+            key: ValueKey<String>(imagePath),
+            child: _buildImage(imagePath, aspectRatio, maxHeight, isMobile),
+          ),
+        ),
       ),
     );
   }

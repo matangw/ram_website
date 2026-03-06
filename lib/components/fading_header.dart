@@ -19,6 +19,7 @@ class FadingHeader extends StatefulWidget {
     required this.imagePaths,
     required this.opacity,
     this.navOverlay,
+    this.currentImageIndex,
     this.rotationInterval = const Duration(seconds: 6),
     this.crossfadeDuration = const Duration(milliseconds: 1500),
   });
@@ -26,6 +27,8 @@ class FadingHeader extends StatefulWidget {
   final List<String> imagePaths;
   final double opacity;
   final Widget? navOverlay;
+  /// When set, uses this index instead of internal rotation (parent-controlled).
+  final int? currentImageIndex;
   final Duration rotationInterval;
   final Duration crossfadeDuration;
 
@@ -39,7 +42,7 @@ class _FadingHeaderState extends State<FadingHeader> {
   @override
   void initState() {
     super.initState();
-    if (widget.imagePaths.length > 1) {
+    if (widget.currentImageIndex == null && widget.imagePaths.length > 1) {
       _startImageRotation();
     }
   }
@@ -79,7 +82,7 @@ class _FadingHeaderState extends State<FadingHeader> {
                   RepaintBoundary(
                     child: _BackgroundImageStack(
                       imagePaths: widget.imagePaths,
-                      currentIndex: _currentImageIndex,
+                      currentIndex: widget.currentImageIndex ?? _currentImageIndex,
                       crossfadeDuration: widget.crossfadeDuration,
                     ),
                   ),
@@ -115,13 +118,14 @@ class _BackgroundImageStack extends StatelessWidget {
       );
     }
 
+    final safeIndex = currentIndex % imagePaths.length;
     return AnimatedSwitcher(
       duration: crossfadeDuration,
       switchInCurve: Curves.easeIn,
       switchOutCurve: Curves.easeOut,
       child: _BackgroundImage(
-        key: ValueKey<int>(currentIndex),
-        imagePath: imagePaths[currentIndex],
+        key: ValueKey<int>(safeIndex),
+        imagePath: imagePaths[safeIndex],
       ),
     );
   }

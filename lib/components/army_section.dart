@@ -202,16 +202,25 @@ class ArmySection extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              buildSectionImage(
-                imagePath,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                errorBuilder: (_, error, st) {
-                  developer.log('IMAGE LOAD ERROR: $error', name: 'ArmySection');
-                  developer.log('stackTrace: $st', name: 'ArmySection');
-                  return errorPlaceholder;
-                },
+              // Non-positioned child sizes the Stack (required for scroll/layout)
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 800),
+                switchInCurve: Curves.easeIn,
+                switchOutCurve: Curves.easeOut,
+                child: KeyedSubtree(
+                  key: ValueKey<String>(imagePath),
+                  child: buildSectionImage(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    errorBuilder: (_, error, st) {
+                      developer.log('IMAGE LOAD ERROR: $error', name: 'ArmySection');
+                      developer.log('stackTrace: $st', name: 'ArmySection');
+                      return errorPlaceholder;
+                    },
+                  ),
+                ),
               ),
               // Subtle gradient overlay for depth
               Positioned.fill(

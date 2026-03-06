@@ -8,10 +8,11 @@ import '../services/section_image_loader.dart';
 
 /// Manages rotating content: header images, bio images, army images, quotes.
 class ContentController extends GetxController {
-  /// Rotation interval in seconds
-  static const int rotationIntervalSeconds = 6;
+  /// Rotation interval in seconds (staggered: one section changes per tick)
+  static const int rotationIntervalSeconds = 7;
 
   Timer? _rotationTimer;
+  int _rotationCycleIndex = 0; // 0=header, 1=bio, 2=army, 3=quotes
 
   // Header images
   final headerImageIndex = 0.obs;
@@ -143,24 +144,37 @@ class ContentController extends GetxController {
     _rotationTimer?.cancel();
     _rotationTimer = Timer.periodic(
       const Duration(seconds: rotationIntervalSeconds),
-      (_) => _rotateAll(),
+      (_) => _rotateNext(),
     );
   }
 
-  void _rotateAll() {
-    if (headerImagePaths.isNotEmpty) {
-      headerImageIndex.value =
-          (headerImageIndex.value + 1) % headerImagePaths.length;
+  void _rotateNext() {
+    switch (_rotationCycleIndex) {
+      case 0:
+        if (headerImagePaths.isNotEmpty) {
+          headerImageIndex.value =
+              (headerImageIndex.value + 1) % headerImagePaths.length;
+        }
+        break;
+      case 1:
+        if (bioImagePaths.isNotEmpty) {
+          bioImageIndex.value =
+              (bioImageIndex.value + 1) % bioImagePaths.length;
+        }
+        break;
+      case 2:
+        if (armyImagePaths.isNotEmpty) {
+          armyImageIndex.value =
+              (armyImageIndex.value + 1) % armyImagePaths.length;
+        }
+        break;
+      case 3:
+        if (quotes.isNotEmpty) {
+          quoteIndex.value = (quoteIndex.value + 1) % quotes.length;
+        }
+        break;
     }
-    if (bioImagePaths.isNotEmpty) {
-      bioImageIndex.value = (bioImageIndex.value + 1) % bioImagePaths.length;
-    }
-    if (armyImagePaths.isNotEmpty) {
-      armyImageIndex.value = (armyImageIndex.value + 1) % armyImagePaths.length;
-    }
-    if (quotes.isNotEmpty) {
-      quoteIndex.value = (quoteIndex.value + 1) % quotes.length;
-    }
+    _rotationCycleIndex = (_rotationCycleIndex + 1) % 4;
     update();
   }
 

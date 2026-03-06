@@ -127,6 +127,7 @@ class _HomePageState extends State<HomePage> {
                     child: FadingHeader(
                       imagePaths: ctrl.headerImagePaths,
                       opacity: opacity,
+                      currentImageIndex: ctrl.headerImageIndex.value,
                       navOverlay: SectionNavButtons(
                         currentSectionIndex: sectionIndex,
                         onSectionTap: _scrollToSection,
