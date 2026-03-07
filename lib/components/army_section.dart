@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 import 'package:ram_website/widgets/animated_section_content.dart';
 import 'package:ram_website/widgets/section_image.dart';
 
@@ -12,7 +13,7 @@ import 'package:ram_website/widgets/section_image.dart';
 /// - Left: Army service summary text
 /// - Right: Image (parent passes currentImagePath for rotation control)
 /// - LayoutBuilder: Desktop = side-by-side; Mobile = stacked (summary top, image below)
-/// - Dark theme with tasteful military-inspired accents (muted green/gold)
+/// - Dark theme with tasteful military-inspired accents (darker smooth gold)
 /// - Flat image with accent border
 /// - Entrance animation via flutter_animate
 class ArmySection extends StatelessWidget {
@@ -36,26 +37,19 @@ class ArmySection extends StatelessWidget {
   /// When true, summary text slides in from top; when false, text is hidden.
   final bool isCurrentSection;
 
-  // Optimistic memorial accents (sage, warm bronze)
-  static const Color _accentGreen = Color(0xFF7A9B76);
-  static const Color _accentGold = Color(0xFF8B7355);
-  static const Color _bgDark = Color(0xFFFAF7F2);
-  static const Color _cardBg = Color(0xFFF5F0E8);
-  static const Color _textPrimary = Color(0xFF2D2D2D);
-  static const Color _textSecondary = Color(0xFF6B6B6B);
-
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     final isMobile = MediaQuery.of(context).size.width < 700;
 
     return Container(
           width: double.infinity,
           constraints: BoxConstraints(minHeight: minHeight),
           decoration: BoxDecoration(
-            color: _bgDark,
+            color: theme.surface,
             border: Border(
-              top: BorderSide(color: _accentGreen.withOpacity(0.3), width: 1),
-              bottom: BorderSide(color: _accentGold.withOpacity(0.2), width: 1),
+              top: BorderSide(color: theme.primaryGold.withOpacity(0.3), width: 1),
+              bottom: BorderSide(color: theme.tertiaryGold.withOpacity(0.2), width: 1),
             ),
           ),
           child: Padding(
@@ -83,7 +77,7 @@ class ArmySection extends StatelessWidget {
             children: [
               Expanded(
                 flex: 1,
-                child: _buildSummaryContent(),
+                child: _buildSummaryContent(context),
               ),
               const SizedBox(width: 48),
               Expanded(
@@ -102,14 +96,15 @@ class ArmySection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildSummaryContent(),
+        _buildSummaryContent(context),
         const SizedBox(height: 32),
         _buildImageContent(context),
       ],
     );
   }
 
-  Widget _buildSummaryContent() {
+  Widget _buildSummaryContent(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     return AnimatedSectionContent(
       isCurrentSection: isCurrentSection,
       child: Column(
@@ -123,7 +118,7 @@ class ArmySection extends StatelessWidget {
                 height: 3,
                 width: 48,
                 decoration: BoxDecoration(
-                  color: _accentGold.withOpacity(0.6),
+                  color: theme.tertiaryGold.withOpacity(0.6),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -134,7 +129,7 @@ class ArmySection extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 3,
-                  color: _accentGold.withOpacity(0.9),
+                  color: theme.tertiaryGold.withOpacity(0.9),
                 ),
               ),
             ],
@@ -146,7 +141,7 @@ class ArmySection extends StatelessWidget {
             style: GoogleFonts.heebo(
               fontSize: 16,
               height: 1.7,
-              color: _textSecondary,
+              color: theme.textSecondary,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -161,6 +156,7 @@ class ArmySection extends StatelessWidget {
     final aspectRatio = 4 / 3;
     final maxHeight = isMobile ? 260.0 : 340.0;
 
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     if (imagePath.isEmpty) {
       developer.log('imagePath is EMPTY', name: 'ArmySection');
       return Container(
@@ -169,14 +165,14 @@ class ArmySection extends StatelessWidget {
             minHeight: 160,
           ),
           decoration: BoxDecoration(
-            color: _cardBg,
+            color: theme.surfaceSecondary,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Center(
             child: Icon(
               Icons.image_outlined,
               size: 48,
-              color: _textSecondary.withOpacity(0.4),
+              color: theme.textSecondary.withOpacity(0.4),
             ),
           ),
         );
@@ -185,12 +181,12 @@ class ArmySection extends StatelessWidget {
     developer.log('loading url=${imagePath.substring(0, imagePath.length.clamp(0, 60))}...', name: 'ArmySection');
 
     final errorPlaceholder = Container(
-      color: _cardBg,
+      color: theme.surfaceSecondary,
       child: Center(
         child: Icon(
           Icons.broken_image_outlined,
           size: 48,
-          color: _textSecondary.withOpacity(0.4),
+          color: theme.textSecondary.withOpacity(0.4),
         ),
       ),
     );
@@ -204,7 +200,7 @@ class ArmySection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: theme.shadowMedium,
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

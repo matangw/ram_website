@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'pages/home_page.dart';
+import 'theme/theme_colors.dart';
 
 void main() {
   developer.log('=== RAM_WEBSITE APP START ===', name: 'RAM_IMAGES');
@@ -15,6 +16,7 @@ class MemorialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ext = MemorialThemeExtension.light;
     return GetMaterialApp(
       title: 'Memorial',
       debugShowCheckedModeBanner: false,
@@ -23,12 +25,13 @@ class MemorialApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.light(
-          primary: const Color(0xFFB8860B),
-          surface: const Color(0xFFFAF7F2),
-          onSurface: const Color(0xFF2D2D2D),
-          onSurfaceVariant: const Color(0xFF6B6B6B),
-          tertiary: const Color(0xFF7A9B76),
+          primary: ext.primaryGold,
+          surface: ext.surface,
+          onSurface: ext.textPrimary,
+          onSurfaceVariant: ext.textSecondary,
+          tertiary: ext.tertiaryGold,
         ),
+        extensions: [ext],
       ),
       builder: (context, child) {
         return Directionality(

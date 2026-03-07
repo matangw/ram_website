@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 
 /// Premium section navigation bar for memorial landing pages.
 ///
@@ -68,6 +69,7 @@ class _NavButtonState extends State<_NavButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     final isInteractive = _isHovered || _isPressed;
 
     return Material(
@@ -106,8 +108,8 @@ class _NavButtonState extends State<_NavButton> {
               fontWeight: widget.isActive ? FontWeight.w600 : FontWeight.w500,
               letterSpacing: 0.2,
               color: widget.isActive
-                  ? const Color(0xFF2D2D2D)
-                  : const Color(0xFF2D2D2D).withOpacity(isInteractive ? 0.9 : 0.7),
+                  ? theme.textPrimary
+                  : theme.textPrimary.withOpacity(isInteractive ? 0.9 : 0.7),
             ),
             child: Text(widget.label),
           ),

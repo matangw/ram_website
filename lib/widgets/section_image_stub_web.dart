@@ -5,6 +5,7 @@ import 'dart:typed_data' as typed_data;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cors_image/flutter_cors_image.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 
 /// Web-specific implementation. Loads assets via HTTP fetch (bypasses rootBundle
 /// path bug) and displays with Image.memory.
@@ -29,26 +30,30 @@ Widget buildSectionImage({
       width: width,
       height: height,
       enableHoverIcons: false,
-      customLoadingBuilder: (context, child, progress) => Container(
-        color: const Color(0xFFF5F0E8),
-        child: const Center(
-          child: SizedBox(
-            width: 24,
-            height: 24,
-            child: CircularProgressIndicator(strokeWidth: 2),
+      customLoadingBuilder: (context, child, progress) {
+        final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
+        return Container(
+          color: theme.surfaceSecondary,
+          child: const Center(
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
           ),
-        ),
-      ),
+        );
+      },
       errorBuilder: errorBuilder ??
           (context, error, stackTrace) {
             developer.log(
               'CustomNetworkImage LOAD ERROR: $error',
               name: 'SectionImage',
             );
+            final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
             return Container(
-              color: const Color(0xFFF5F0E8),
-              child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
+              color: theme.surfaceSecondary,
+              child: Center(
+                child: Icon(Icons.broken_image_outlined, color: theme.textSecondary),
               ),
             );
           },
@@ -61,8 +66,9 @@ Widget buildSectionImage({
     future: _getCachedAssetBytes(imagePath),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
+        final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
         return Container(
-          color: const Color(0xFFF5F0E8),
+          color: theme.surfaceSecondary,
           child: const Center(
             child: SizedBox(
               width: 24,
@@ -74,11 +80,12 @@ Widget buildSectionImage({
       }
       if (snapshot.hasError || !snapshot.hasData) {
         developer.log('Asset load failed: ${snapshot.error}', name: 'SectionImage');
+        final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
         return errorBuilder?.call(context, snapshot.error ?? Object(), StackTrace.current) ??
             Container(
-              color: const Color(0xFFF5F0E8),
-              child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
+              color: theme.surfaceSecondary,
+              child: Center(
+                child: Icon(Icons.broken_image_outlined, color: theme.textSecondary),
               ),
             );
       }
@@ -92,12 +99,15 @@ Widget buildSectionImage({
                 snapshot.data!,
                 fit: BoxFit.cover,
                 errorBuilder: errorBuilder ??
-                    (context, error, stackTrace) => Container(
-                          color: const Color(0xFFF5F0E8),
-                          child: const Center(
-                            child: Icon(Icons.broken_image_outlined, color: Color(0xFF6B6B6B)),
-                          ),
+                    (context, error, stackTrace) {
+                      final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
+                      return Container(
+                        color: theme.surfaceSecondary,
+                        child: Center(
+                          child: Icon(Icons.broken_image_outlined, color: theme.textSecondary),
                         ),
+                      );
+                    },
               ),
             );
           }
@@ -114,12 +124,15 @@ Widget buildSectionImage({
               width: double.infinity,
               height: double.infinity,
               errorBuilder: errorBuilder ??
-                  (context, error, stackTrace) => Container(
-                        color: const Color(0xFFF5F0E8),
-                        child: const Center(
-                          child: Icon(Icons.broken_image_outlined, color: Color(0xFF6B6B6B)),
-                        ),
+                  (context, error, stackTrace) {
+                    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
+                    return Container(
+                      color: theme.surfaceSecondary,
+                      child: Center(
+                        child: Icon(Icons.broken_image_outlined, color: theme.textSecondary),
                       ),
+                    );
+                  },
             ),
           );
         },

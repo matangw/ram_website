@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 import 'package:ram_website/widgets/animated_section_content.dart';
 import 'package:ram_website/widgets/section_image.dart';
 
@@ -36,10 +37,10 @@ class BioSection extends StatelessWidget {
   static const double _mobileBreakpoint = 600;
   static const double _tabletBreakpoint = 900;
   static const double _minHeight = 400;
-  static const Color _bgColor = Color(0xFFFAF7F2);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < _mobileBreakpoint;
     final isTablet = width >= _mobileBreakpoint && width < _tabletBreakpoint;
@@ -51,7 +52,7 @@ class BioSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(minHeight: _minHeight),
-      color: _bgColor,
+      color: theme.surface,
       padding: EdgeInsetsDirectional.only(
         start: horizontalPadding,
         end: horizontalPadding,
@@ -123,6 +124,7 @@ class _BioContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     final isMobile = MediaQuery.of(context).size.width < 600;
     return Padding(
       padding: EdgeInsetsDirectional.only(top: isMobile ? 0 : 8),
@@ -138,7 +140,7 @@ class _BioContent extends StatelessWidget {
               fontSize: isMobile ? 18 : 22,
               height: 1.7,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF2D2D2D),
+              color: theme.textPrimary,
               letterSpacing: 0.3,
             ),
           ),
@@ -153,10 +155,9 @@ class _ProfileImage extends StatelessWidget {
 
   final String imagePath;
 
-  static const Color _accentSage = Color(0xFF7A9B76);
-
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     final isMobile = MediaQuery.of(context).size.width < 600;
     final aspectRatio = isMobile ? 4 / 3 : 3 / 4;
     final maxHeight = isMobile ? 280.0 : 360.0;
@@ -180,7 +181,7 @@ class _ProfileImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: theme.shadowMedium,
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -197,7 +198,7 @@ class _ProfileImage extends StatelessWidget {
             switchOutCurve: Curves.easeOut,
             child: KeyedSubtree(
               key: ValueKey<String>(imagePath),
-              child: _buildImage(imagePath, aspectRatio, maxHeight, isMobile),
+              child: _buildImage(context, imagePath, aspectRatio, maxHeight, isMobile),
             ),
           ),
         ),
@@ -205,7 +206,7 @@ class _ProfileImage extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(String path, double aspectRatio, double maxHeight, bool isMobile) {
+  Widget _buildImage(BuildContext context, String path, double aspectRatio, double maxHeight, bool isMobile) {
     final placeholder = _PlaceholderImage(
       aspectRatio: aspectRatio,
       maxHeight: maxHeight,
@@ -238,17 +239,18 @@ class _PlaceholderImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     return Container(
       constraints: BoxConstraints(
         maxHeight: maxHeight,
         minHeight: isMobile ? 200 : 280,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F0E8),
+        color: theme.surfaceSecondary,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: theme.shadowMedium,
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -260,7 +262,7 @@ class _PlaceholderImage extends StatelessWidget {
           child: Icon(
             Icons.person_outline_rounded,
             size: 40,
-            color: const Color(0xFF6B6B6B).withOpacity(0.6),
+            color: theme.textSecondary.withOpacity(0.6),
           ),
         ),
       ),

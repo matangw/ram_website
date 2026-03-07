@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 import 'package:ram_website/widgets/section_image.dart';
 
 /// A premium full-width hero section for memorial landing pages.
@@ -135,9 +136,10 @@ class _BackgroundImageStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     if (imagePaths.isEmpty) {
       return Container(
-        color: const Color(0xFFFAF7F2),
+        color: theme.surface,
       );
     }
 
@@ -164,6 +166,7 @@ class _BackgroundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     return SizedBox.expand(
       child: buildSectionImage(
         imagePath,
@@ -172,12 +175,12 @@ class _BackgroundImage extends StatelessWidget {
           developer.log('IMAGE LOAD ERROR: $error', name: 'FadingHeader');
           developer.log('stackTrace: $stackTrace', name: 'FadingHeader');
           return Container(
-            color: const Color(0xFFFAF7F2),
+            color: theme.surface,
             child: Center(
               child: Text(
                 'הוסף תמונות ל-assets/header/',
                 style: GoogleFonts.heebo(
-                  color: const Color(0xFF6B6B6B),
+                  color: theme.textSecondary,
                   fontSize: 14,
                 ),
               ),
@@ -194,6 +197,7 @@ class _DarkGradientOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     return Positioned.fill(
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -201,9 +205,9 @@ class _DarkGradientOverlay extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.black.withOpacity(0.15),
-              Colors.black.withOpacity(0.3),
-              Colors.black.withOpacity(0.5),
+              theme.shadowLight,
+              theme.shadowMedium,
+              theme.shadowDark,
             ],
             stops: const [0.0, 0.5, 1.0],
           ),
@@ -289,29 +293,27 @@ class _ProfileImage extends StatelessWidget {
   final double width;
   final double height;
 
-  static const Color _borderCream = Color(0xFFFAF7F2);
-  static const Color _bronze = Color(0xFF8B7355);
-
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: _borderCream.withOpacity(0.9),
+          color: theme.surface.withOpacity(0.9),
           width: 3,
         ),
         boxShadow: [
           BoxShadow(
-            color: _bronze.withOpacity(0.25),
+            color: theme.tertiaryGold.withOpacity(0.25),
             blurRadius: 32,
             offset: const Offset(0, 12),
             spreadRadius: -4,
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: theme.shadowMedium,
             blurRadius: 24,
             offset: const Offset(0, 8),
             spreadRadius: -2,
@@ -327,11 +329,11 @@ class _ProfileImage extends StatelessWidget {
           height: height,
           errorBuilder: (context, error, stackTrace) {
             return Container(
-              color: const Color(0xFFF5F0E8),
+              color: theme.surfaceSecondary,
               child: Icon(
                 Icons.person,
                 size: width * 0.5,
-                color: const Color(0xFF6B6B6B),
+                color: theme.textSecondary,
               ),
             );
           },
@@ -356,14 +358,13 @@ class _Badge extends StatelessWidget {
   final double paddingH;
   final double paddingV;
 
-  static const Color _accentSage = Color(0xFF7A9B76);
-
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
       decoration: BoxDecoration(
-        color: _accentSage.withOpacity(0.93),
+        color: theme.primaryGold.withOpacity(0.93),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -387,6 +388,7 @@ class _GlassmorphismNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     return Positioned(
       top: 0,
       left: 0,
@@ -406,13 +408,13 @@ class _GlassmorphismNavBar extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  const Color(0xFFFAF7F2).withOpacity(0.85),
-                  const Color(0xFFF5F0E8).withOpacity(0.6),
+                  theme.surface.withOpacity(0.85),
+                  theme.surfaceSecondary.withOpacity(0.6),
                 ],
               ),
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.black.withOpacity(0.06),
+                  color: theme.shadowLight.withOpacity(0.4),
                   width: 1,
                 ),
               ),

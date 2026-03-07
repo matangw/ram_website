@@ -11,6 +11,7 @@ import '../components/fading_header.dart';
 import '../components/friends_quotes_section.dart';
 import '../components/section_nav_buttons.dart';
 import '../controllers/content_controller.dart';
+import '../theme/theme_colors.dart';
 import '../controllers/scroll_controller.dart' as landing;
 
 /// Memorial landing page - composes all sections.
@@ -92,8 +93,9 @@ class _HomePageState extends State<HomePage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         WidgetsBinding.instance.addPostFrameCallback((_) => _measureAndUpdateSectionOffsets());
+        final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
         return Scaffold(
-          backgroundColor: const Color(0xFFFAF7F2),
+          backgroundColor: theme.surface,
           body: Listener(
             behavior: HitTestBehavior.translucent,
             onPointerSignal: (event) {

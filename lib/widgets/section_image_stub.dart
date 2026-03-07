@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cors_image/flutter_cors_image.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 
 Widget buildSectionImage({
   required String imagePath,
@@ -21,24 +22,28 @@ Widget buildSectionImage({
       width: width,
       height: height,
       enableHoverIcons: false,
-      customLoadingBuilder: (context, child, progress) => Container(
-        color: const Color(0xFFF5F0E8),
-        child: const Center(
-          child: SizedBox(
-            width: 24,
-            height: 24,
-            child: CircularProgressIndicator(strokeWidth: 2),
+      customLoadingBuilder: (context, child, progress) {
+        final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
+        return Container(
+          color: theme.surfaceSecondary,
+          child: const Center(
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
           ),
-        ),
-      ),
+        );
+      },
       errorBuilder: errorBuilder ??
           (context, error, stackTrace) {
             developer.log('CustomNetworkImage LOAD ERROR: $error', name: 'SectionImage');
             developer.log('URL was: ${imagePath.substring(0, imagePath.length.clamp(0, 80))}...', name: 'SectionImage');
+            final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
             return Container(
-              color: const Color(0xFFF5F0E8),
-              child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
+              color: theme.surfaceSecondary,
+              child: Center(
+                child: Icon(Icons.broken_image_outlined, color: theme.textSecondary),
               ),
             );
           },
@@ -51,11 +56,14 @@ Widget buildSectionImage({
     width: width,
     height: height,
     errorBuilder: errorBuilder ??
-        (context, error, stackTrace) => Container(
-              color: const Color(0xFFF5F0E8),
-              child: const Center(
-                child: Icon(Icons.broken_image_outlined, color: const Color(0xFF6B6B6B)),
-              ),
+        (context, error, stackTrace) {
+          final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
+          return Container(
+            color: theme.surfaceSecondary,
+            child: Center(
+              child: Icon(Icons.broken_image_outlined, color: theme.textSecondary),
             ),
+          );
+        },
   );
 }

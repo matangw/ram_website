@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 import 'package:ram_website/widgets/animated_section_content.dart';
 
 /// A premium full-width section displaying rotating friend quotes.
@@ -25,10 +26,10 @@ class FriendsQuotesSection extends StatelessWidget {
   final bool isCurrentSection;
 
   static const double _mobileBreakpoint = 600;
-  static const Color _bgColor = Color(0xFFFAF7F2);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     final isMobile = MediaQuery.of(context).size.width < _mobileBreakpoint;
     final horizontalPadding = isMobile ? 24.0 : 48.0;
     final verticalPadding = isMobile ? 48.0 : 72.0;
@@ -38,7 +39,7 @@ class FriendsQuotesSection extends StatelessWidget {
     return Container(
           width: double.infinity,
           constraints: const BoxConstraints(minHeight: 400),
-          color: _bgColor,
+          color: theme.surface,
           padding: EdgeInsetsDirectional.only(
             start: horizontalPadding,
             end: horizontalPadding,
@@ -64,7 +65,7 @@ class FriendsQuotesSection extends StatelessWidget {
                         style: GoogleFonts.heebo(
                           fontSize: 64,
                           height: 0.8,
-                          color: Colors.black.withOpacity(0.15),
+                          color: theme.shadowLight,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
@@ -76,7 +77,7 @@ class FriendsQuotesSection extends StatelessWidget {
                           height: 1.65,
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.italic,
-                          color: const Color(0xFF2D2D2D),
+                          color: theme.textPrimary,
                           letterSpacing: 0.2,
                         ),
                       ),
@@ -87,7 +88,7 @@ class FriendsQuotesSection extends StatelessWidget {
                         style: GoogleFonts.heebo(
                           fontSize: authorFontSize,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF6B6B6B),
+                          color: theme.textSecondary,
                           letterSpacing: 0.5,
                         ),
                       ),

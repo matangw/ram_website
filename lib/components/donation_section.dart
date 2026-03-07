@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/theme/theme_colors.dart';
 import 'package:ram_website/widgets/animated_section_content.dart';
 
 /// A premium full-width donation section for memorial landing pages.
@@ -40,11 +41,10 @@ class DonationSection extends StatelessWidget {
 
   static const double _mobileBreakpoint = 600;
   static const double _tabletBreakpoint = 900;
-  static const Color _bgColor = Color(0xFFFAF7F2);
-  static const Color _accentColor = Color(0xFF7A9B76); // Sage green, hopeful CTA
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < _mobileBreakpoint;
     final isTablet = width >= _mobileBreakpoint && width < _tabletBreakpoint;
@@ -55,7 +55,7 @@ class DonationSection extends StatelessWidget {
 
     return Container(
           width: double.infinity,
-          color: _bgColor,
+          color: theme.surface,
           padding: EdgeInsetsDirectional.only(
             start: horizontalPadding,
             end: horizontalPadding,
@@ -81,7 +81,7 @@ class DonationSection extends StatelessWidget {
                           style: GoogleFonts.heebo(
                             fontSize: isMobile ? 28 : 34,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF2D2D2D),
+                            color: theme.textPrimary,
                             letterSpacing: 0.5,
                             height: 1.2,
                           ),
@@ -94,7 +94,7 @@ class DonationSection extends StatelessWidget {
                             fontSize: isMobile ? 15 : 17,
                             height: 1.65,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF6B6B6B),
+                            color: theme.textSecondary,
                             letterSpacing: 0.2,
                           ),
                         ),
@@ -104,7 +104,7 @@ class DonationSection extends StatelessWidget {
                   SizedBox(height: isMobile ? 28 : 36),
                   _DonationCta(
                     label: ctaText,
-                    accentColor: _accentColor,
+                    accentColor: theme.secondaryGold,
                     onPressed: onPressed ?? () {},
                   ),
                 ],
@@ -135,11 +135,12 @@ class _DonationCtaState extends State<_DonationCta> {
   bool _isHovered = false;
   bool _isPressed = false;
 
-  Color _computeBackgroundColor() {
+  Color _computeBackgroundColor(BuildContext context) {
+    final theme = Theme.of(context).extension<MemorialThemeExtension>()!;
     if (_isPressed) {
       return Color.lerp(
         widget.accentColor,
-        const Color(0xFFF5F0E8),
+        theme.surfaceSecondary,
         0.12,
       ) ?? widget.accentColor;
     }
@@ -180,7 +181,7 @@ class _DonationCtaState extends State<_DonationCta> {
             vertical: 16,
           ),
           decoration: BoxDecoration(
-            color: _computeBackgroundColor(),
+            color: _computeBackgroundColor(context),
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
