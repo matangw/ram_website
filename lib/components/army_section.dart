@@ -38,7 +38,6 @@ class ArmySection extends StatelessWidget {
 
   // Optimistic memorial accents (sage, warm bronze)
   static const Color _accentGreen = Color(0xFF7A9B76);
-  static const Color _accentGreenDark = Color(0xFF5A7856); // darker variant for borders
   static const Color _accentGold = Color(0xFF8B7355);
   static const Color _bgDark = Color(0xFFFAF7F2);
   static const Color _cardBg = Color(0xFFF5F0E8);
@@ -172,10 +171,6 @@ class ArmySection extends StatelessWidget {
           decoration: BoxDecoration(
             color: _cardBg,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _accentGreenDark,
-              width: 6,
-            ),
           ),
           child: Center(
             child: Icon(
@@ -207,10 +202,6 @@ class ArmySection extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _accentGreenDark,
-          width: 6,
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),

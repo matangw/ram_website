@@ -154,7 +154,6 @@ class _ProfileImage extends StatelessWidget {
   final String imagePath;
 
   static const Color _accentSage = Color(0xFF7A9B76);
-  static const Color _accentSageDark = Color(0xFF5A7856); // darker variant for borders
 
   @override
   Widget build(BuildContext context) {
@@ -179,10 +178,6 @@ class _ProfileImage extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _accentSageDark,
-          width: 6,
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -251,10 +246,6 @@ class _PlaceholderImage extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFF5F0E8),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFF5A7856),
-          width: 6,
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
