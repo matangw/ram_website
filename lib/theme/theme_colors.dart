@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Memorial color palette — darker smooth gold accents.
-/// Warm cream backgrounds, dignified gold accents, warm brown text.
+/// Memorial color palette — black background, white text, gold accents.
+/// Designer-recommended: #0A0A0A (softer than pure black), #FFFFFF primary text,
+/// #A1A1AA secondary, #71717A muted. Gold accents for CTAs and dignity.
 ///
 /// All colors are defined here. Components access them via
 /// `Theme.of(context).extension<MemorialThemeExtension>()`.
@@ -34,20 +35,23 @@ class MemorialThemeExtension extends ThemeExtension<MemorialThemeExtension> {
   final Color shadowMedium;
   final Color shadowDark;
 
-  /// Single source of truth for the light theme palette.
+  /// Black/white theme — designer-recommended palette.
+  /// Background: #0A0A0A (softer than pure black, reduces eye strain).
+  /// Text: #FFFFFF primary, #A1A1AA secondary, #71717A muted.
+  /// Gold accents for memorial dignity; WCAG AA compliant.
   static MemorialThemeExtension get light => MemorialThemeExtension(
-        surface: const Color(0xFFFAF7F2),
-        surfaceSecondary: const Color(0xFFF5F0E8),
-        primaryGold: const Color(0xFF8B6914),
-        secondaryGold: const Color(0xFF9A7B0A),
+        surface: const Color(0xFF0A0A0A),
+        surfaceSecondary: const Color(0xFF141414),
+        primaryGold: const Color(0xFFD4AF37),
+        secondaryGold: const Color(0xFFE5C158),
         tertiaryGold: const Color(0xFFB8956B),
-        goldHover: const Color(0xFFC9A227),
-        textPrimary: const Color(0xFF2C2416),
-        textSecondary: const Color(0xFF5C5348),
-        textMuted: const Color(0xFF7A7065),
-        shadowLight: Colors.black.withOpacity(0.15),
-        shadowMedium: Colors.black.withOpacity(0.3),
-        shadowDark: Colors.black.withOpacity(0.5),
+        goldHover: const Color(0xFFE8D48B),
+        textPrimary: const Color(0xFFFFFFFF),
+        textSecondary: const Color(0xFFA1A1AA),
+        textMuted: const Color(0xFF71717A),
+        shadowLight: Colors.black.withOpacity(0.25),
+        shadowMedium: Colors.black.withOpacity(0.4),
+        shadowDark: Colors.black.withOpacity(0.6),
       );
 
   @override

@@ -24,7 +24,7 @@ class MemorialApp extends StatelessWidget {
       fallbackLocale: const Locale('he', 'IL'),
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.light(
+        colorScheme: ColorScheme.dark(
           primary: ext.primaryGold,
           surface: ext.surface,
           onSurface: ext.textPrimary,

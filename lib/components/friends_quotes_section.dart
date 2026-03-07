@@ -65,7 +65,7 @@ class FriendsQuotesSection extends StatelessWidget {
                         style: GoogleFonts.heebo(
                           fontSize: 64,
                           height: 0.8,
-                          color: theme.shadowLight,
+                          color: theme.textMuted,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
