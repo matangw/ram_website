@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/widgets/animated_section_content.dart';
 import 'package:ram_website/widgets/section_image.dart';
 
 /// A premium full-width bio section for memorial landing pages.
@@ -20,6 +21,7 @@ class BioSection extends StatelessWidget {
     super.key,
     required this.bioText,
     required this.imagePath,
+    this.isCurrentSection = true,
   });
 
   /// Short bio text displayed on the left (desktop) or top (mobile).
@@ -27,6 +29,9 @@ class BioSection extends StatelessWidget {
 
   /// Current rotating image path. Parent manages rotation; can be empty.
   final String imagePath;
+
+  /// When true, bio text slides in from top; when false, text is hidden.
+  final bool isCurrentSection;
 
   static const double _mobileBreakpoint = 600;
   static const double _tabletBreakpoint = 900;
@@ -64,7 +69,10 @@ class BioSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _BioContent(bioText: bioText),
+        AnimatedSectionContent(
+          isCurrentSection: isCurrentSection,
+          child: _BioContent(bioText: bioText),
+        ),
         SizedBox(height: gap),
         _ProfileImage(imagePath: imagePath),
       ],
@@ -90,7 +98,10 @@ class BioSection extends StatelessWidget {
             children: [
               Expanded(
                 flex: isTablet ? 5 : 6,
-                child: _BioContent(bioText: bioText),
+                child: AnimatedSectionContent(
+                  isCurrentSection: isCurrentSection,
+                  child: _BioContent(bioText: bioText),
+                ),
               ),
               SizedBox(width: gap),
               Expanded(

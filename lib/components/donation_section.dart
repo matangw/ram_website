@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/widgets/animated_section_content.dart';
 
 /// A premium full-width donation section for memorial landing pages.
 ///
@@ -18,6 +19,7 @@ class DonationSection extends StatelessWidget {
     required this.title,
     required this.body,
     required this.ctaText,
+    this.isCurrentSection = true,
     this.onPressed,
   });
 
@@ -29,6 +31,9 @@ class DonationSection extends StatelessWidget {
 
   /// CTA button label (e.g. "Donate Now").
   final String ctaText;
+
+  /// When true, title and body slide in from top; when false, they are hidden.
+  final bool isCurrentSection;
 
   /// Callback when CTA is pressed. Use empty/placeholder if not yet wired.
   final VoidCallback? onPressed;
@@ -64,27 +69,36 @@ class DonationSection extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    title,
-                    textAlign: TextAlign.start,
-                    style: GoogleFonts.heebo(
-                      fontSize: isMobile ? 28 : 34,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF2D2D2D),
-                      letterSpacing: 0.5,
-                      height: 1.2,
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 16 : 20),
-                  Text(
-                    body,
-                    textAlign: TextAlign.start,
-                    style: GoogleFonts.heebo(
-                      fontSize: isMobile ? 15 : 17,
-                      height: 1.65,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF6B6B6B),
-                      letterSpacing: 0.2,
+                  AnimatedSectionContent(
+                    isCurrentSection: isCurrentSection,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          textAlign: TextAlign.start,
+                          style: GoogleFonts.heebo(
+                            fontSize: isMobile ? 28 : 34,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF2D2D2D),
+                            letterSpacing: 0.5,
+                            height: 1.2,
+                          ),
+                        ),
+                        SizedBox(height: isMobile ? 16 : 20),
+                        Text(
+                          body,
+                          textAlign: TextAlign.start,
+                          style: GoogleFonts.heebo(
+                            fontSize: isMobile ? 15 : 17,
+                            height: 1.65,
+                            fontWeight: FontWeight.w400,
+                            color: const Color(0xFF6B6B6B),
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: isMobile ? 28 : 36),

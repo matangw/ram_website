@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ram_website/widgets/animated_section_content.dart';
 import 'package:ram_website/widgets/section_image.dart';
 
 /// A premium full-width section for memorial landing pages showcasing
@@ -20,6 +21,7 @@ class ArmySection extends StatelessWidget {
     required this.serviceSummary,
     required this.imagePath,
     this.minHeight = 400,
+    this.isCurrentSection = true,
   });
 
   /// The Army service summary text displayed on the left (or top on mobile).
@@ -30,6 +32,9 @@ class ArmySection extends StatelessWidget {
 
   /// Minimum height of the section in logical pixels.
   final double minHeight;
+
+  /// When true, summary text slides in from top; when false, text is hidden.
+  final bool isCurrentSection;
 
   // Optimistic memorial accents (sage, warm bronze)
   static const Color _accentGreen = Color(0xFF7A9B76);
@@ -106,7 +111,8 @@ class ArmySection extends StatelessWidget {
   }
 
   Widget _buildSummaryContent() {
-    return _AnimatedContent(
+    return AnimatedSectionContent(
+      isCurrentSection: isCurrentSection,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -158,8 +164,7 @@ class ArmySection extends StatelessWidget {
 
     if (imagePath.isEmpty) {
       developer.log('imagePath is EMPTY', name: 'ArmySection');
-      return _AnimatedContent(
-        child: Container(
+      return Container(
           constraints: BoxConstraints(
             maxHeight: maxHeight,
             minHeight: 160,
@@ -179,8 +184,7 @@ class ArmySection extends StatelessWidget {
               color: _textSecondary.withOpacity(0.4),
             ),
           ),
-        ),
-      );
+        );
     }
 
     developer.log('loading url=${imagePath.substring(0, imagePath.length.clamp(0, 60))}...', name: 'ArmySection');
@@ -196,64 +200,51 @@ class ArmySection extends StatelessWidget {
       ),
     );
 
-    return _AnimatedContent(
-      child: Container(
-        constraints: BoxConstraints(
-          maxHeight: maxHeight,
-          minHeight: 160,
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: maxHeight,
+        minHeight: 160,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: _accentGreenDark,
+          width: 6,
         ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: _accentGreenDark,
-            width: 6,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: AspectRatio(
-            aspectRatio: aspectRatio,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 800),
-              switchInCurve: Curves.easeIn,
-              switchOutCurve: Curves.easeOut,
-              child: KeyedSubtree(
-                key: ValueKey<String>(imagePath),
-                child: buildSectionImage(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                  errorBuilder: (_, error, st) {
-                    developer.log('IMAGE LOAD ERROR: $error', name: 'ArmySection');
-                    developer.log('stackTrace: $st', name: 'ArmySection');
-                    return errorPlaceholder;
-                  },
-                ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: AspectRatio(
+          aspectRatio: aspectRatio,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 800),
+            switchInCurve: Curves.easeIn,
+            switchOutCurve: Curves.easeOut,
+            child: KeyedSubtree(
+              key: ValueKey<String>(imagePath),
+              child: buildSectionImage(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                errorBuilder: (_, error, st) {
+                  developer.log('IMAGE LOAD ERROR: $error', name: 'ArmySection');
+                  developer.log('stackTrace: $st', name: 'ArmySection');
+                  return errorPlaceholder;
+                },
               ),
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-class _AnimatedContent extends StatelessWidget {
-  const _AnimatedContent({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return child;
   }
 }
