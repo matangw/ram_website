@@ -24,3 +24,21 @@ Future<List<String>> loadSectionImages(String prefix) async {
     return [];
   }
 }
+
+/// Looks for a profile image in the header folder.
+/// Returns the first matching path (profile_image.png or profile.png), or empty string if none found.
+Future<String> loadHeaderProfileImagePath() async {
+  try {
+    final headerAssets = await loadSectionImages('assets/header/');
+    final profileNames = ['profile_image.png', 'profile.png'];
+    for (final name in profileNames) {
+      final match = headerAssets
+          .where((p) => p.toLowerCase().endsWith(name))
+          .toList();
+      if (match.isNotEmpty) return match.first;
+    }
+    return '';
+  } catch (_) {
+    return '';
+  }
+}

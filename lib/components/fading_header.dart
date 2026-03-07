@@ -22,6 +22,10 @@ class FadingHeader extends StatefulWidget {
     this.currentImageIndex,
     this.rotationInterval = const Duration(seconds: 6),
     this.crossfadeDuration = const Duration(milliseconds: 1500),
+    this.profileImagePath,
+    this.name,
+    this.yearFrom = 0,
+    this.yearTo = 0,
   });
 
   final List<String> imagePaths;
@@ -31,6 +35,10 @@ class FadingHeader extends StatefulWidget {
   final int? currentImageIndex;
   final Duration rotationInterval;
   final Duration crossfadeDuration;
+  final String? profileImagePath;
+  final String? name;
+  final int yearFrom;
+  final int yearTo;
 
   @override
   State<FadingHeader> createState() => _FadingHeaderState();
@@ -90,6 +98,17 @@ class _FadingHeaderState extends State<FadingHeader> {
                 ],
               ),
             ),
+            if (_hasCenterContent)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: _HeaderCenterContent(
+                    profileImagePath: widget.profileImagePath ?? '',
+                    name: widget.name ?? '',
+                    yearFrom: widget.yearFrom,
+                    yearTo: widget.yearTo,
+                  ),
+                ),
+              ),
             if (widget.navOverlay != null)
               _GlassmorphismNavBar(child: widget.navOverlay!),
           ],
@@ -97,6 +116,10 @@ class _FadingHeaderState extends State<FadingHeader> {
       ),
     );
   }
+
+  bool get _hasCenterContent =>
+      (widget.profileImagePath?.isNotEmpty ?? false) ||
+      (widget.name?.isNotEmpty ?? false);
 }
 
 class _BackgroundImageStack extends StatelessWidget {
@@ -184,6 +207,173 @@ class _DarkGradientOverlay extends StatelessWidget {
             ],
             stops: const [0.0, 0.5, 1.0],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderCenterContent extends StatelessWidget {
+  const _HeaderCenterContent({
+    required this.profileImagePath,
+    required this.name,
+    required this.yearFrom,
+    required this.yearTo,
+  });
+
+  final String profileImagePath;
+  final String name;
+  final int yearFrom;
+  final int yearTo;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
+    final isTablet = width >= 600 && width < 900;
+
+    final imageSize = isMobile ? 140.0 : (isTablet ? 180.0 : 220.0);
+    final nameFontSize = isMobile ? 20.0 : 24.0;
+    final yearFontSize = isMobile ? 16.0 : 18.0;
+    final badgePaddingH = isMobile ? 16.0 : 20.0;
+    final badgePaddingV = isMobile ? 8.0 : 10.0;
+
+    return Center(
+      child: Transform.translate(
+        offset: const Offset(0, -24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (profileImagePath.isNotEmpty) ...[
+              _ProfileImage(
+                imagePath: profileImagePath,
+                width: imageSize,
+                height: imageSize * 1.4,
+              ),
+              const SizedBox(height: 20),
+            ],
+            if (name.isNotEmpty)
+              _Badge(
+                text: name,
+                fontSize: nameFontSize,
+                fontWeight: FontWeight.w700,
+                paddingH: badgePaddingH,
+                paddingV: badgePaddingV,
+              ),
+            if (name.isNotEmpty && (yearFrom > 0 || yearTo > 0))
+              const SizedBox(height: 12),
+            if (yearFrom > 0 || yearTo > 0)
+              _Badge(
+                text: '$yearFrom - $yearTo',
+                fontSize: yearFontSize,
+                fontWeight: FontWeight.w600,
+                paddingH: badgePaddingH,
+                paddingV: badgePaddingV,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileImage extends StatelessWidget {
+  const _ProfileImage({
+    required this.imagePath,
+    required this.width,
+    required this.height,
+  });
+
+  final String imagePath;
+  final double width;
+  final double height;
+
+  static const Color _borderCream = Color(0xFFFAF7F2);
+  static const Color _bronze = Color(0xFF8B7355);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: _borderCream.withOpacity(0.9),
+          width: 3,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: _bronze.withOpacity(0.25),
+            blurRadius: 32,
+            offset: const Offset(0, 12),
+            spreadRadius: -4,
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+            spreadRadius: -2,
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(9),
+        child: buildSectionImage(
+          imagePath,
+          fit: BoxFit.cover,
+          width: width,
+          height: height,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: const Color(0xFFF5F0E8),
+              child: Icon(
+                Icons.person,
+                size: width * 0.5,
+                color: const Color(0xFF6B6B6B),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge({
+    required this.text,
+    required this.fontSize,
+    required this.fontWeight,
+    required this.paddingH,
+    required this.paddingV,
+  });
+
+  final String text;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final double paddingH;
+  final double paddingV;
+
+  static const Color _accentSage = Color(0xFF7A9B76);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+      decoration: BoxDecoration(
+        color: _accentSage.withOpacity(0.93),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.heebo(
+          color: Colors.white,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          letterSpacing: fontWeight == FontWeight.w700 ? 0.5 : 0.3,
         ),
       ),
     );

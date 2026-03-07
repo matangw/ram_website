@@ -64,6 +64,7 @@ flutter:
     - assets/images/
     - assets/header/
     - assets/header/images/
+    - assets/header/profile_image.png
     - assets/bio/
     - assets/bio/bio.json
     - assets/bio/images/

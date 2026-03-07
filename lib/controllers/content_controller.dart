@@ -4,7 +4,8 @@ import 'dart:developer' as developer;
 import 'package:get/get.dart';
 
 import '../services/asset_loader.dart';
-import '../services/section_image_loader.dart';
+import '../services/section_image_loader.dart'
+    show loadSectionImages, loadHeaderProfileImagePath;
 
 /// Manages rotating content: header images, bio images, army images, quotes.
 class ContentController extends GetxController {
@@ -33,6 +34,12 @@ class ContentController extends GetxController {
   // Bio text (reactive for initial load)
   final bioText = ''.obs;
 
+  // Header profile (name, years, profile image)
+  final headerName = ''.obs;
+  int headerYearFrom = 0;
+  int headerYearTo = 0;
+  final headerProfileImagePath = ''.obs;
+
   // Army service summary
   final armySummary = ''.obs;
 
@@ -52,6 +59,7 @@ class ContentController extends GetxController {
     developer.log('_loadAssets started', name: 'ContentController');
     await Future.wait([
       _loadHeaderImages(),
+      _loadHeaderProfileImage(),
       _loadBioContent(),
       _loadArmyContent(),
       _loadQuotes(),
@@ -72,11 +80,23 @@ class ContentController extends GetxController {
     }
   }
 
+  Future<void> _loadHeaderProfileImage() async {
+    try {
+      headerProfileImagePath.value = await loadHeaderProfileImagePath();
+      developer.log('header profile image: ${headerProfileImagePath.value}', name: 'ContentController');
+    } catch (_) {
+      headerProfileImagePath.value = '';
+    }
+  }
+
   Future<void> _loadBioContent() async {
     try {
       final jsonStr = await loadAssetString('assets/bio/bio.json');
       final data = json.decode(jsonStr) as Map<String, dynamic>;
       bioText.value = data['text'] as String? ?? '';
+      headerName.value = data['name'] as String? ?? '';
+      headerYearFrom = (data['yearFrom'] as num?)?.toInt() ?? 0;
+      headerYearTo = (data['yearTo'] as num?)?.toInt() ?? 0;
       bioImagePaths = await loadSectionImages('assets/bio/images/');
       developer.log('bio images loaded: ${bioImagePaths.length} paths', name: 'ContentController');
     } catch (e, st) {

@@ -232,6 +232,10 @@ class _HomePageState extends State<HomePage> {
                             imagePaths: ctrl.headerImagePaths,
                             opacity: opacity,
                             currentImageIndex: ctrl.headerImageIndex.value,
+                            profileImagePath: ctrl.headerProfileImagePath.value,
+                            name: ctrl.headerName.value,
+                            yearFrom: ctrl.headerYearFrom,
+                            yearTo: ctrl.headerYearTo,
                             navOverlay: SectionNavButtons(
                               currentSectionIndex: sectionIndex,
                               onSectionTap: _scrollToSection,
